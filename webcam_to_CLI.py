@@ -36,7 +36,7 @@ def main(argv,argc):
         case "ascii"|"a":
             vid = cv2.VideoCapture(0,cv2.CAP_DSHOW)
             app_modes.ASCIIFlux(vid,dictChar,resX,resY,setRes)
-        case "greyscale" | "gs":
+        case "greyscale" | "gr":
             vid = cv2.VideoCapture(0,cv2.CAP_DSHOW)
             app_modes.greyScaleANSIFlux(vid,resX,resY,setRes)
         case "fullColor" | "fc" | "default" :
