@@ -6,7 +6,7 @@ You can also use it to print images with the CLI.
 ![Capture d'écran 2024-01-25 213914](https://github.com/belabon25/webcam_to_CLI/assets/74050200/b405a0cd-8c12-4248-abb8-26db8248cbc1)
 
 # Prerequisites
-OpenCV is necessary for this project, to install it you have to execute the command "python3 -m pip install opencv-python"\
+OpenCV is necessary for this project, to install it you have to execute the command "python3 -m pip install opencv-python"
 
 To run the app, you simply have to open a terminal at the location of the project and type "python3 webcam_to_cli.py"
 
