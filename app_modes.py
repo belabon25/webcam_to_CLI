@@ -119,8 +119,10 @@ def printImageGR(imagePath,resX,resY):
     gr_n = img
     gr_n = cv2.normalize(img,gr_n,0,23,cv2.NORM_MINMAX)
     w_cli_control.first_writeImageGR(gr_n)
+    print("\033[0;37m\033[48;5;0m")
 
 def printImageFC(imagePath,resX,resY):
     img = cv2.imread(imagePath)
     img = cv2.resize(img,(resX,resY),interpolation = cv2.INTER_AREA)
     w_cli_control.first_writeImageFC(img)
+    print("\033[0;37m\033[48;5;0m")
