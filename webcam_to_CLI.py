@@ -31,16 +31,33 @@ def main(argv,argc):
             case "-i"|"--image-path":
                 imagePath=argv[i+1]           
     
-
     match mode:
         case "ascii"|"a":
+            if not vid.isOpened():
+                vid.open(0)
+            (ret,_) = vid.read()
+            if not ret :
+                while not ret :
+                    (ret,_) = vid.read()
             vid = cv2.VideoCapture(0,cv2.CAP_DSHOW)
             app_modes.ASCIIFlux(vid,dictChar,resX,resY,setRes)
         case "greyscale" | "gr":
             vid = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+            if not vid.isOpened():
+                vid.open(0)
+            (ret,_) = vid.read()
+            if not ret :
+                while not ret :
+                    (ret,_) = vid.read()
             app_modes.greyScaleANSIFlux(vid,resX,resY,setRes)
         case "fullColor" | "fc" | "default" :
             vid = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+            if not vid.isOpened():
+                vid.open(0)
+            (ret,_) = vid.read()
+            if not ret :
+                while not ret :
+                    (ret,_) = vid.read()
             app_modes.fullColorANSIFlux(vid,resX,resY,setRes)
         case "loadimagefc" | "lifc" :
             if(imagePath==""): 
