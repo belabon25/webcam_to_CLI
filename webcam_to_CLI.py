@@ -33,6 +33,7 @@ def main(argv,argc):
     
     match mode:
         case "ascii"|"a":
+            vid = cv2.VideoCapture(0,cv2.CAP_DSHOW)
             if not vid.isOpened():
                 vid.open(0)
             (ret,_) = vid.read()
