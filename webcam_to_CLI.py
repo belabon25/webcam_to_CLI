@@ -40,7 +40,6 @@ def main(argv,argc):
             if not ret :
                 while not ret :
                     (ret,_) = vid.read()
-            vid = cv2.VideoCapture(0,cv2.CAP_DSHOW)
             app_modes.ASCIIFlux(vid,dictChar,resX,resY,setRes)
         case "greyscale" | "gr":
             vid = cv2.VideoCapture(0,cv2.CAP_DSHOW)
