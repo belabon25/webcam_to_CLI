@@ -17,10 +17,10 @@ def readAndResize(vid,resX,resY):
     (_,frame) = vid.read()
     return cv2.resize(frame,(resX,resY),interpolation = cv2.INTER_AREA)  
 
-def convertAndNormalize(frame,dictlen:255):
+def convertAndNormalize(frame,ramp:255):
     gr = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gr_n = gr
-    gr_n = cv2.normalize(gr,gr_n,0,dictlen-1,cv2.NORM_MINMAX)
+    gr_n = cv2.normalize(gr,gr_n,0,ramp-1,cv2.NORM_MINMAX)
     return gr_n
 
 def programExit():
@@ -32,16 +32,16 @@ def programExit():
     print("Program terminated")
 
 def ASCIIFlux(vid,dictChar,resX,resY,setRes) :
-    dictlen = len(dictChar)
+    ramp = len(dictChar)
     windowSetup()
     frame = readAndResize(vid,resX,resY)
-    gr_n = convertAndNormalize(frame,dictlen)
+    gr_n = convertAndNormalize(frame,ramp)
     w_cli_control.first_writeImageASCII(gr_n,dictChar)
     try:
         while(True):
             previousFrame=gr_n
             frame = readAndResize(vid,resX,resY)
-            gr_n = convertAndNormalize(frame,dictlen)
+            gr_n = convertAndNormalize(frame,ramp)
             w_cli_control.writeImageASCII(gr_n,previousFrame,dictChar)
             if(not setRes) :
                 size = os.get_terminal_size()

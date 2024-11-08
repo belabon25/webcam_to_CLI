@@ -1,15 +1,15 @@
-def first_writeImageASCII(image,dictChar):
+def first_writeImageASCII(image,ramp):
    s=""
    for i in range(len(image)) :
         for j in range(len(image[0])) :
-            s+= "\033[%d;%d;H" % (i+1, j+1) + dictChar[image[i][j]]
+            s+= "\033[%d;%d;H" % (i+1, j+1) + ramp[image[i][j]]
    print(s)    
-def writeImageASCII(image,previousFrame,dictChar):
+def writeImageASCII(image,previousFrame,ramp):
    s=""
    for i in range(len(image)) :
         for j in range(len(image[0])) :
             if((image[i][j] != previousFrame[i][j])):
-               s+= "\033[%d;%d;H" % (i+1, j+1) + dictChar[image[i][j]]
+               s+= "\033[%d;%d;H" % (i+1, j+1) + ramp[image[i][j]]
    print(s)
 
 

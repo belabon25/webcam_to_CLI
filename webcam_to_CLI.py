@@ -4,17 +4,24 @@ import cv2
 
 import app_modes
 
+def webcamStart():
+    vid = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+    if not vid.isOpened():
+        vid.open(0)
+        (ret,_) = vid.read()
+        if not ret :
+            while not ret :
+                (ret,_) = vid.read()
+    return vid
+
 def main(argv,argc):
     mode="default"
-    ramp = "$EFLlv!;,."
-    dictChar = dict()
+    ramp = " .,;!vlLFE$"
     size = os.get_terminal_size()
     resX=size.columns
     resY=size.lines-1
     imagePath = ""
     setRes = False
-    for i in range(len(ramp)):
-        dictChar[i]=ramp[-i]
     if((argc+1)%2 != 0) : 
         print("Mauvais arguments")
         return
@@ -33,31 +40,13 @@ def main(argv,argc):
     
     match mode:
         case "ascii"|"a":
-            vid = cv2.VideoCapture(0,cv2.CAP_DSHOW)
-            if not vid.isOpened():
-                vid.open(0)
-            (ret,_) = vid.read()
-            if not ret :
-                while not ret :
-                    (ret,_) = vid.read()
-            app_modes.ASCIIFlux(vid,dictChar,resX,resY,setRes)
+            vid = webcamStart()
+            app_modes.ASCIIFlux(vid,ramp,resX,resY,setRes)
         case "greyscale" | "gr":
-            vid = cv2.VideoCapture(0,cv2.CAP_DSHOW)
-            if not vid.isOpened():
-                vid.open(0)
-            (ret,_) = vid.read()
-            if not ret :
-                while not ret :
-                    (ret,_) = vid.read()
+            vid = webcamStart()
             app_modes.greyScaleANSIFlux(vid,resX,resY,setRes)
         case "fullColor" | "fc" | "default" :
-            vid = cv2.VideoCapture(0,cv2.CAP_DSHOW)
-            if not vid.isOpened():
-                vid.open(0)
-            (ret,_) = vid.read()
-            if not ret :
-                while not ret :
-                    (ret,_) = vid.read()
+            vid = webcamStart()
             app_modes.fullColorANSIFlux(vid,resX,resY,setRes)
         case "loadimagefc" | "lifc" :
             if(imagePath==""): 
