@@ -6,7 +6,7 @@ import app_modes
 
 def main(argv,argc):
     mode="default"
-    ramp = "@OEULi:. "
+    ramp = "$EFLlv!;,."
     dictChar = dict()
     size = os.get_terminal_size()
     resX=size.columns
