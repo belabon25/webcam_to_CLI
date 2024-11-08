@@ -1,3 +1,6 @@
+
+#ASCII image writing
+# \033[%d;%d;H is the ANSI escape sequence for cursor handling, i being the column and j being the line (if i remember correctly)
 def first_writeImageASCII(image,ramp):
    s=""
    for i in range(len(image)) :
@@ -13,7 +16,10 @@ def writeImageASCII(image,previousFrame,ramp):
    print(s)
 
 
-
+#Greyscale image writing
+# \033[%d;%d;H is the ANSI escape sequence for cursor handling, i being the column and j being the line (if i remember correctly)
+# \033[48;5;%dm represent the background color of the character (which is the ' ' written just after the m)
+# Here, we use the 255 color mode, 232 from 255 are different shades of grey (refer to https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences)
 def first_writeImageGR(image):
    s=""
    for i in range(len(image)) :
@@ -29,7 +35,10 @@ def writeImageGR(image,previousFrame):
    print(s)
 
 
-
+#Full color image writing
+# \033[%d;%d;H is the ANSI escape sequence for cursor handling, i being the column and j being the line (if i remember correctly)
+# \033[48;2;%d;%d;%dm represent the background color of the character (which is the ' ' written just after the m)
+#Here, we use the full scale of color available by combinaison of RGB value, each primary color scaling from 0 to 255
 def first_writeImageFC(image):
    s=""
    for i in range(len(image)) :

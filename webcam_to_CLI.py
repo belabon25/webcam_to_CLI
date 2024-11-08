@@ -4,6 +4,8 @@ import cv2
 
 import app_modes
 
+
+#Starts the camera and forces it to give a frame (had some issues with it not working properly)
 def webcamStart():
     vid = cv2.VideoCapture(0,cv2.CAP_DSHOW)
     if not vid.isOpened():
@@ -15,6 +17,7 @@ def webcamStart():
     return vid
 
 def main(argv,argc):
+    #Base values
     mode="default"
     ramp = " .,;!vlLFE$"
     size = os.get_terminal_size()
@@ -22,9 +25,12 @@ def main(argv,argc):
     resY=size.lines-1
     imagePath = ""
     setRes = False
+
     if((argc+1)%2 != 0) : 
-        print("Mauvais arguments")
+        print("Bad arguments")
         return
+    
+    #Parameter selector
     for i in range(1,argc,2):
         match argv[i]:
             case "-m"|"--mode":
@@ -38,6 +44,7 @@ def main(argv,argc):
             case "-i"|"--image-path":
                 imagePath=argv[i+1]           
     
+    #Mode selector
     match mode:
         case "ascii"|"a":
             vid = webcamStart()

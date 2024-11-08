@@ -5,6 +5,8 @@ import time
 
 import w_cli_control
 
+
+#Clears the screen according to the distribution
 def windowSetup():
     if(platform.system() == "Windows"):
         os.system("cls")
@@ -13,16 +15,19 @@ def windowSetup():
     else:
         os.system("clear")
 
+#Creates a frame and size it according to CLI resolution
 def readAndResize(vid,resX,resY):
     (_,frame) = vid.read()
     return cv2.resize(frame,(resX,resY),interpolation = cv2.INTER_AREA)  
 
-def convertAndNormalize(frame,ramp:255):
+#Transform the picture to a grayscale according to the number of colors available (23 by default)
+def convertAndNormalize(frame,ramp=23):
     gr = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gr_n = gr
     gr_n = cv2.normalize(gr,gr_n,0,ramp-1,cv2.NORM_MINMAX)
     return gr_n
 
+#Clears the screen and reset colors
 def programExit():
     print('\033[0m')
     if(platform.system() == "Windows"):
@@ -30,6 +35,7 @@ def programExit():
     else:
         os.system("clear")
     print("Program terminated")
+
 
 def ASCIIFlux(vid,dictChar,resX,resY,setRes) :
     ramp = len(dictChar)
@@ -43,6 +49,8 @@ def ASCIIFlux(vid,dictChar,resX,resY,setRes) :
             frame = readAndResize(vid,resX,resY)
             gr_n = convertAndNormalize(frame,ramp)
             w_cli_control.writeImageASCII(gr_n,previousFrame,dictChar)
+
+            #Checking if we changed the terminal resolution and rewrite an entire image if it changed
             if(not setRes) :
                 size = os.get_terminal_size()
                 if(resX != size.columns | resY != size.lines-1) :               
@@ -50,6 +58,7 @@ def ASCIIFlux(vid,dictChar,resX,resY,setRes) :
                     resY = size.lines-1
                     gr_n = cv2.resize(gr_n,(resX,resY),interpolation = cv2.INTER_AREA)
                     w_cli_control.first_writeImageASCII(gr_n,dictChar)
+            
             time.sleep(1/30)
     except KeyboardInterrupt:
         programExit()
@@ -57,14 +66,16 @@ def ASCIIFlux(vid,dictChar,resX,resY,setRes) :
 def greyScaleANSIFlux(vid,resX,resY,setRes):
     windowSetup()
     frame = readAndResize(vid,resX,resY)
-    gr_n = convertAndNormalize(frame,23)
+    gr_n = convertAndNormalize(frame)
     w_cli_control.first_writeImageGR(gr_n)
     try:
         while(True):
             previousFrame=gr_n
             frame = readAndResize(vid,resX,resY)
-            gr_n = convertAndNormalize(frame,23)
+            gr_n = convertAndNormalize(frame)
             w_cli_control.writeImageGR(gr_n,previousFrame)
+
+            #Checking if we changed the terminal resolution and rewrite an entire image if it changed
             if(not setRes) :
                 size = os.get_terminal_size()
                 if(resX != size.columns | resY != size.lines-1) :               
@@ -72,6 +83,7 @@ def greyScaleANSIFlux(vid,resX,resY,setRes):
                     resY = size.lines-1
                     gr_n = cv2.resize(gr_n,(resX,resY),interpolation = cv2.INTER_AREA)
                     w_cli_control.first_writeImageGR(gr_n)
+
             time.sleep(1/30)
     except KeyboardInterrupt:
         programExit()
@@ -87,6 +99,8 @@ def fullColorANSIFlux(vid,resX,resY,setRes):
             (_,frame) = vid.read()
             frame = cv2.resize(frame,(resX,resY),interpolation = cv2.INTER_AREA)
             w_cli_control.writeImageFC(frame,previousFrame)
+
+            #Checking if we changed the terminal resolution and rewrite an entire image if it changed
             if(not setRes) :
                 size = os.get_terminal_size()
                 if(resX != size.columns | resY != size.lines-1) :               
@@ -94,6 +108,7 @@ def fullColorANSIFlux(vid,resX,resY,setRes):
                     resY = size.lines-1
                     frame = cv2.resize(frame,(resX,resY),interpolation = cv2.INTER_AREA)
                     w_cli_control.first_writeImageFC(frame)
+            
             time.sleep(1/30)
     except KeyboardInterrupt:
         programExit()
