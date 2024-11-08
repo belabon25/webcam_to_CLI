@@ -8,7 +8,7 @@ def writeImageASCII(image,previousFrame,dictChar):
    s=""
    for i in range(len(image)) :
         for j in range(len(image[0])) :
-            if((image[i][j] != previousFrame[i][j]).any()):
+            if((image[i][j] != previousFrame[i][j])):
                s+= "\033[%d;%d;H" % (i+1, j+1) + dictChar[image[i][j]]
    print(s)
 

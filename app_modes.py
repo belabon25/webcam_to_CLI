@@ -5,28 +5,43 @@ import time
 
 import w_cli_control
 
-def ASCIIFlux(vid,dictChar,resX,resY,setRes) :
-    dictlen = len(dictChar)
+def windowSetup():
     if(platform.system() == "Windows"):
         os.system("cls")
         from colorama import just_fix_windows_console
         just_fix_windows_console()
     else:
         os.system("clear")
+
+def readAndResize(vid,resX,resY):
     (_,frame) = vid.read()
-    frame = cv2.resize(frame,(resX,resY),interpolation = cv2.INTER_AREA)  
+    return cv2.resize(frame,(resX,resY),interpolation = cv2.INTER_AREA)  
+
+def convertAndNormalize(frame,dictlen:255):
     gr = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gr_n = gr
     gr_n = cv2.normalize(gr,gr_n,0,dictlen-1,cv2.NORM_MINMAX)
+    return gr_n
+
+def programExit():
+    print('\033[0m')
+    if(platform.system() == "Windows"):
+        os.system("cls")
+    else:
+        os.system("clear")
+    print("Program terminated")
+
+def ASCIIFlux(vid,dictChar,resX,resY,setRes) :
+    dictlen = len(dictChar)
+    windowSetup()
+    frame = readAndResize(vid,resX,resY)
+    gr_n = convertAndNormalize(frame,dictlen)
     w_cli_control.first_writeImageASCII(gr_n,dictChar)
     try:
         while(True):
             previousFrame=gr_n
-            (_,frame) = vid.read()
-            frame = cv2.resize(frame,(resX,resY),interpolation = cv2.INTER_AREA)  
-            gr = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            gr_n = gr
-            gr_n = cv2.normalize(gr,gr_n,0,dictlen-1,cv2.NORM_MINMAX)
+            frame = readAndResize(vid,resX,resY)
+            gr_n = convertAndNormalize(frame,dictlen)
             w_cli_control.writeImageASCII(gr_n,previousFrame,dictChar)
             if(not setRes) :
                 size = os.get_terminal_size()
@@ -37,33 +52,18 @@ def ASCIIFlux(vid,dictChar,resX,resY,setRes) :
                     w_cli_control.first_writeImageASCII(gr_n,dictChar)
             time.sleep(1/30)
     except KeyboardInterrupt:
-        if(platform.system() == "Windows"):
-            os.system("cls")
-        else:
-            os.system("clear")
-        print("Fin du programme.")
+        programExit()
 
 def greyScaleANSIFlux(vid,resX,resY,setRes):
-    if(platform.system() == "Windows"):
-        os.system("cls")
-        from colorama import just_fix_windows_console
-        just_fix_windows_console()
-    else:
-        os.system("clear")
-    (_,frame) = vid.read()
-    frame = cv2.resize(frame,(resX,resY),interpolation = cv2.INTER_AREA)  
-    gr = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    gr_n = gr
-    gr_n = cv2.normalize(gr,gr_n,0,23,cv2.NORM_MINMAX)
+    windowSetup()
+    frame = readAndResize(vid,resX,resY)
+    gr_n = convertAndNormalize(frame,23)
     w_cli_control.first_writeImageGR(gr_n)
     try:
         while(True):
             previousFrame=gr_n
-            (_,frame) = vid.read()
-            frame = cv2.resize(frame,(resX,resY),interpolation = cv2.INTER_AREA)  
-            gr = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            gr_n = gr
-            gr_n = cv2.normalize(gr,gr_n,0,23,cv2.NORM_MINMAX)
+            frame = readAndResize(vid,resX,resY)
+            gr_n = convertAndNormalize(frame,23)
             w_cli_control.writeImageGR(gr_n,previousFrame)
             if(not setRes) :
                 size = os.get_terminal_size()
@@ -74,20 +74,10 @@ def greyScaleANSIFlux(vid,resX,resY,setRes):
                     w_cli_control.first_writeImageGR(gr_n)
             time.sleep(1/30)
     except KeyboardInterrupt:
-        print("\033[0;37m\033[48;5;0m")
-        if(platform.system() == "Windows"):
-            os.system("cls")
-        else:
-            os.system("clear")
-        print("Program terminated")
+        programExit()
 
 def fullColorANSIFlux(vid,resX,resY,setRes):
-    if(platform.system() == "Windows"):
-        os.system("cls")
-        from colorama import just_fix_windows_console
-        just_fix_windows_console()
-    else:
-        os.system("clear")
+    windowSetup()
     (_,frame) = vid.read()
     frame = cv2.resize(frame,(resX,resY),interpolation = cv2.INTER_AREA)
     w_cli_control.first_writeImageFC(frame)
@@ -106,12 +96,7 @@ def fullColorANSIFlux(vid,resX,resY,setRes):
                     w_cli_control.first_writeImageFC(frame)
             time.sleep(1/30)
     except KeyboardInterrupt:
-        print("\033[0;37m\033[48;5;0m")
-        if(platform.system() == "Windows"):
-            os.system("cls")
-        else:
-            os.system("clear")
-        print("Program terminated")    
+        programExit()
 
 def printImageGR(imagePath,resX,resY):
     img = cv2.imread(imagePath, cv2.IMREAD_GRAYSCALE)
@@ -119,10 +104,8 @@ def printImageGR(imagePath,resX,resY):
     gr_n = img
     gr_n = cv2.normalize(img,gr_n,0,23,cv2.NORM_MINMAX)
     w_cli_control.first_writeImageGR(gr_n)
-    print("\033[0;37m\033[48;5;0m")
 
 def printImageFC(imagePath,resX,resY):
     img = cv2.imread(imagePath)
     img = cv2.resize(img,(resX,resY),interpolation = cv2.INTER_AREA)
     w_cli_control.first_writeImageFC(img)
-    print("\033[0;37m\033[48;5;0m")
