@@ -29,7 +29,7 @@ def convertAndNormalize(frame,ramp=23):
 
 #Clears the screen and reset colors
 def programExit():
-    print('\033[0m')
+    print('\033[0m\033[?25h')
     if(platform.system() == "Windows"):
         os.system("cls")
     else:
